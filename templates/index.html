@@ -1,96 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Iris Dashboard</title>
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"> -->
+    <meta charset="utf-8" />
     <!-- 引入刚刚下载的 ECharts 文件 -->
+    <!-- <script src="js/echarts.js"></script> -->
     <script src="{{ url_for('static', filename='js/echarts.js') }}"></script>
   </head>
-  <body>
-    <h1>鸢尾花数据可视化</h1>
-    <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-    <div id="main" style="width: 1000px; height: 400px"></div>
 
+  <body>
+    <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+    <div id="main" style="width: 600px; height: 400px"></div>
     <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById("main"));
 
-      // var option = {
-      //   title: {
-      //     text: "鸢尾花数据集的种类分布",
-      //   },
-      //   tooltip: {},
-      //   legend: {
-      //     data: ["数量"],
-      //   },
-      //   dataset: {
-      //     source: [
-      //       { 种类: "山鸢尾", 数量: 50 },
-      //       { 种类: "杂色鸢尾", 数量: 50 },
-      //       { 种类: "弗吉尼亚鸢尾", 数量: 50 },
-      //     ],
-      //   },
-      //   xAxis: {
-      //     type: "category",
-      //   },
-      //   yAxis: {},
-      //   series: [
-      //     {
-      //       type: "bar",
-      //     },
-      //   ],
-      // };
-
-      // myChart.setOption(option);
-
-      //// 柱状图的绘制
-      // // 定义图表的配置和数据
-      // var option = {
-      //   title: {
-      //     text: "鸢尾花数据集的种类分布",
-      //   },
-      //   tooltip: {},
-      //   legend: {
-      //     data: ["数量"],
-      //   },
-      //   xAxis: {
-      //     type: "category",
-      //   },
-      //   yAxis: {},
-      //   series: [
-      //     {
-      //       type: "bar",
-      //     },
-      //   ],
-      // };
-
-      // // 英文到中文的映射
-      // const speciesNameMapping = {
-      //   "Iris-setosa": "山鸢尾",
-      //   "Iris-versicolor": "杂色鸢尾",
-      //   "Iris-virginica": "弗吉尼亚鸢尾",
-      // };
-
-      // // 使用 fetch API 加载 JSON 数据
-      // fetch("/iris_species_counts")
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //     // 将英文种类名称转换为中文
-      //     data.forEach((item) => {
-      //       item.species = speciesNameMapping[item.species] || item.species;
-      //     });
-      //     // 数据加载后，设置 series 的数据
-      //     option.series[0].data = data.map((item) => item.count);
-      //     option.xAxis.data = data.map((item) => item.species);
-
-      //     // 使用指定的配置项和数据显示图表
-      //     myChart.setOption(option);
-      //   })
-      //   .catch((error) => console.error("Error loading the JSON data:", error));
-
-      // myChart.setOption(option);
-
-      //// 柱状图+饼图绘制
-      // 定义图表的配置和数据
+      // 指定图表的配置项和数据
       var option = {
         title: {
           text: "鸢尾花数据集的种类分布",
@@ -99,41 +23,25 @@
         legend: {
           data: ["数量"],
         },
-        grid: [
-          { left: "10%", width: "50%" }, // 柱状图的布局
-          { right: "10%", width: "40%" }, // 饼图的布局
-        ],
-        xAxis: [
-          {
-            type: "category",
-            gridIndex: 0, // 指定使用的 grid
-          },
-        ],
-        yAxis: [
-          {
-            gridIndex: 0, // 指定使用的 grid
-          },
-        ],
+        xAxis: {
+          type: "category",
+        },
+        yAxis: {},
+        dataset: {},
         series: [
           {
+            name: "数量",
             type: "bar",
-            xAxisIndex: 0, // 指定使用的 xAxis
-            yAxisIndex: 0, // 指定使用的 yAxis
-            // 其他柱状图配置...
-          },
-          {
-            type: "pie",
-            label: {
-              show: false,
+            // 指定数据来源
+            encode: {
+              // x 轴使用 species
+              x: "species",
+              // y 轴使用 count
+              y: "count",
             },
-            radius: "30%", // 设置饼图的半径
-            center: ["75%", "50%"], // 设置饼图的位置
-            // 饼图配置...
-            // 饼图的数据将在数据加载后设置
           },
         ],
       };
-
       // 英文到中文的映射
       const speciesNameMapping = {
         "Iris-setosa": "山鸢尾",
@@ -145,22 +53,14 @@
       fetch("/iris_species_counts")
         .then((response) => response.json())
         .then((data) => {
-          // 将英文种类名称转换为中文
+          // console.log(data)
+
           data.forEach((item) => {
             item.species = speciesNameMapping[item.species] || item.species;
           });
-          // 数据加载后，设置柱状图和饼图的数据
-          option.series[0].data = data.map((item) => ({
-            name: item.species,
-            value: item.count,
-          }));
-          option.series[1].data = data.map((item) => ({
-            name: item.species,
-            value: item.count,
-          }));
-          option.xAxis[0].data = data.map((item) => item.species); // 设置柱状图的 x 轴数据
 
-          // 使用指定的配置项和数据显示图表
+          option.dataset.source = data;
+          console.log(option.dataset.source);
           myChart.setOption(option);
         })
         .catch((error) => console.error("Error loading the JSON data:", error));
