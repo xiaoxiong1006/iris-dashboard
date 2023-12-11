@@ -26,12 +26,12 @@ def iris_species_counts():
     return jsonify(echarts_data)
 
 @app.route('/iris_sepal_data')
-def iris_data():
+def iris_sepal_data():
     
     # 分别获取三个种类的鸢尾花
-    iris_setosa = iris[iris.Species == 'Iris-setosa'].head(5)
-    iris_versicolor = iris[iris.Species == 'Iris-versicolor'].head(5)
-    iris_virginica = iris[iris.Species == 'Iris-virginica'].head(5)
+    iris_setosa = iris[iris.Species == 'Iris-setosa']
+    iris_versicolor = iris[iris.Species == 'Iris-versicolor']
+    iris_virginica = iris[iris.Species == 'Iris-virginica']
 
     # 构造返回的 JSON 数据
     data_to_return = [

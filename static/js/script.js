@@ -48,8 +48,23 @@ var scatterChart = echarts.init(
   document.getElementById("scatterChartContainer")
 );
 
-// 指定饼图的配置项和数据
+// 指定散点图的配置项和数据
 var scatterOption = {
+  title: {
+    text: "不同种类花萼长度与宽度的分布图",
+  },
+  legend: {
+    left: 'center',
+    bottom: 10
+  },
+  toolbox: {
+    feature: {
+      dataZoom: {},
+      brush: {
+        type: ['rect']
+      }
+    }
+  },
   xAxis: [
     {
       type: "value",
@@ -74,44 +89,10 @@ var scatterOption = {
       },
     },
   ],
-  series: [
-    {
-      data: [
-        [5.1, 3.5],
-        [4.9, 3],
-        [4.7, 3.2],
-        [4.6, 3.1],
-        [5, 3.6],
-      ],
-      name: "Iris-setosa",
-      type: 'scatter',
-    },
-    {
-      data: [
-        [7, 3.2],
-        [6.4, 3.2],
-        [6.9, 3.1],
-        [5.5, 2.3],
-        [6.5, 2.8],
-      ],
-      name: "Iris-versicolor",
-      type: 'scatter',
-    },
-    {
-      data: [
-        [6.3, 3.3],
-        [5.8, 2.7],
-        [7.1, 3],
-        [6.3, 2.9],
-        [6.5, 3],
-      ],
-      name: "Iris-virginica",
-      type: 'scatter',
-    },
-  ],
+  series: [{ type: "scatter" }, { type: "scatter" }, { type: "scatter" }],
 };
 
-scatterChart.setOption(scatterOption);
+//scatterChart.setOption(scatterOption);
 
 // 英文到中文的映射
 const speciesNameMapping = {
@@ -120,7 +101,7 @@ const speciesNameMapping = {
   "Iris-virginica": "弗吉尼亚鸢尾",
 };
 
-// 使用 fetch API 加载 JSON 数据
+// 使用 fetch API 加载种类分布的json数据
 fetch("/iris_species_counts")
   .then((response) => response.json())
   .then((data) => {
@@ -139,5 +120,25 @@ fetch("/iris_species_counts")
       value: item.count,
     }));
     pieChart.setOption(pieOption);
+  })
+  .catch((error) => console.error("Error loading the JSON data:", error));
+
+// 使用 fetch API 加载花萼的json数据
+fetch("/iris_sepal_data")
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+
+    // 将数据赋值给 scatterOption.series
+    data.forEach((item, index) => {
+      if (scatterOption.series[index]) {
+        scatterOption.series[index].data = item.data;
+        scatterOption.series[index].name =
+          speciesNameMapping[item.name] || item.name;
+        scatterOption.legend[index] = speciesNameMapping[item.name] || item.name;
+      }
+    });
+
+    scatterChart.setOption(scatterOption);
   })
   .catch((error) => console.error("Error loading the JSON data:", error));
