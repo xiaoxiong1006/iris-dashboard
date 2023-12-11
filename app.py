@@ -3,6 +3,10 @@ import pandas as pd
 
 app = Flask(__name__)
 
+# 读取数据集
+# 注意：请确保文件路径与实际存放的位置匹配
+iris = pd.read_csv("data/iris.csv")
+
 
 @app.route('/')
 def index():
@@ -11,9 +15,6 @@ def index():
 
 @app.route('/iris_species_counts')
 def iris_species_counts():
-    # 读取数据集
-    # 注意：请确保文件路径与实际存放的位置匹配
-    iris = pd.read_csv("data/iris.csv")
 
     # 查看种类的分布情况
     species_counts = iris.Species.value_counts()
@@ -23,3 +24,29 @@ def iris_species_counts():
 
     # 返回 JSON 数据
     return jsonify(echarts_data)
+
+@app.route('/iris_sepal_data')
+def iris_data():
+    
+    # 分别获取三个种类的鸢尾花
+    iris_setosa = iris[iris.Species == 'Iris-setosa'].head(5)
+    iris_versicolor = iris[iris.Species == 'Iris-versicolor'].head(5)
+    iris_virginica = iris[iris.Species == 'Iris-virginica'].head(5)
+
+    # 构造返回的 JSON 数据
+    data_to_return = [
+        {
+            "name": "Iris-setosa",
+            "data": iris_setosa[['SepalLengthCm', 'SepalWidthCm']].values.tolist()
+        },
+        {
+            "name": "Iris-versicolor",
+            "data": iris_versicolor[['SepalLengthCm', 'SepalWidthCm']].values.tolist()
+        },
+        {
+            "name": "Iris-virginica",
+            "data": iris_virginica[['SepalLengthCm', 'SepalWidthCm']].values.tolist()
+        }
+    ]
+
+    return jsonify(data_to_return)
