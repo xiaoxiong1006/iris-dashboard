@@ -9,61 +9,8 @@
 
   <body>
     <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-    <div id="main" style="width: 600px; height: 400px"></div>
-    <script type="text/javascript">
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById("main"));
-
-      // 指定图表的配置项和数据
-      var option = {
-        title: {
-          text: "鸢尾花数据集的种类分布",
-        },
-        tooltip: {},
-        legend: {
-          data: ["数量"],
-        },
-        xAxis: {
-          type: "category",
-        },
-        yAxis: {},
-        dataset: {},
-        series: [
-          {
-            name: "数量",
-            type: "bar",
-            // 指定数据来源
-            encode: {
-              // x 轴使用 species
-              x: "species",
-              // y 轴使用 count
-              y: "count",
-            },
-          },
-        ],
-      };
-      // 英文到中文的映射
-      const speciesNameMapping = {
-        "Iris-setosa": "山鸢尾",
-        "Iris-versicolor": "杂色鸢尾",
-        "Iris-virginica": "弗吉尼亚鸢尾",
-      };
-
-      // 使用 fetch API 加载 JSON 数据
-      fetch("/iris_species_counts")
-        .then((response) => response.json())
-        .then((data) => {
-          // console.log(data)
-
-          data.forEach((item) => {
-            item.species = speciesNameMapping[item.species] || item.species;
-          });
-
-          option.dataset.source = data;
-          console.log(option.dataset.source);
-          myChart.setOption(option);
-        })
-        .catch((error) => console.error("Error loading the JSON data:", error));
-    </script>
+    <div id="barChartContainer" style="width: 600px; height: 400px"></div>
+    <div id="pieChartContainer" style="width: 600px; height: 400px"></div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>
