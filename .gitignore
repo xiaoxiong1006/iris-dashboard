@@ -1,0 +1,8 @@
+# Mac 系统文件
+.DS_Store
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python 编译生成的文件夹
+__pycache__/
