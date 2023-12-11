@@ -38,26 +38,12 @@ var pieOption = {
   series: [
     {
       type: "pie",
-      data: [
-        {
-          value: 50,
-          name: "Iris-setosa",
-        },
-        {
-          value: 50,
-          name: "Iris-versicolor",
-        },
-        {
-          value: 50,
-          name: "Iris-virginica",
-        },
-      ],
       radius: ['40%', '70%']
     },
   ],
 };
 
-pieChart.setOption(pieOption);
+//pieChart.setOption(pieOption);
 
 // 英文到中文的映射
 const speciesNameMapping = {
@@ -77,7 +63,13 @@ fetch("/iris_species_counts")
     });
 
     barOption.dataset.source = data;
-    console.log(barOption.dataset.source);
+    // console.log(barOption.dataset.source);
     barChart.setOption(barOption);
+    
+    pieOption.series[0].data = data.map((item) => ({
+        name: item.species,
+        value: item.count,
+      }));
+    pieChart.setOption(pieOption);
   })
   .catch((error) => console.error("Error loading the JSON data:", error));
