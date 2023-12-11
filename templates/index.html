@@ -5,13 +5,37 @@
     <!-- 引入刚刚下载的 ECharts 文件 -->
     <!-- <script src="js/echarts.js"></script> -->
     <script src="{{ url_for('static', filename='js/echarts.js') }}"></script>
+    <style>
+      .chart-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: flex-start;
+      }
+
+      .chart {
+          width: 600px;
+          height: 400px;
+          margin: 10px;
+      }
+
+      @media (max-width: 650px) {
+          .chart {
+              width: 100%;
+              margin: 10px 0;
+          }
+      }
+  </style>
   </head>
 
   <body>
     <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-    <div id="barChartContainer" style="width: 600px; height: 400px"></div>
-    <div id="pieChartContainer" style="width: 600px; height: 400px"></div>
-    <div id="scatterChartContainer" style="width: 600px; height: 400px"></div>
+    <div class="chart-container">
+      <div id="barChartContainer" class="chart"></div>
+      <div id="pieChartContainer" class="chart"></div>
+      <div id="scatterChartContainer" class="chart"></div>
+      <div id="petalScatterChartContainer" class="chart"></div>
+    </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>

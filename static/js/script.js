@@ -35,6 +35,9 @@ var pieChart = echarts.init(document.getElementById("pieChartContainer"));
 
 // 指定饼图的配置项和数据
 var pieOption = {
+  title: {
+    text: "鸢尾花数据集的种类分布",
+  },
   series: [
     {
       type: "pie",
@@ -54,16 +57,16 @@ var scatterOption = {
     text: "不同种类花萼长度与宽度的分布图",
   },
   legend: {
-    left: 'center',
-    bottom: 10
+    left: "center",
+    bottom: 10,
   },
   toolbox: {
     feature: {
       dataZoom: {},
       brush: {
-        type: ['rect']
-      }
-    }
+        type: ["rect"],
+      },
+    },
   },
   xAxis: [
     {
@@ -135,10 +138,81 @@ fetch("/iris_sepal_data")
         scatterOption.series[index].data = item.data;
         scatterOption.series[index].name =
           speciesNameMapping[item.name] || item.name;
-        scatterOption.legend[index] = speciesNameMapping[item.name] || item.name;
+        scatterOption.legend[index] =
+          speciesNameMapping[item.name] || item.name;
       }
     });
 
     scatterChart.setOption(scatterOption);
+  })
+  .catch((error) => console.error("Error loading the JSON data:", error));
+
+// 花瓣散点图的dom，初始化echarts实例
+var petalScatterChart = echarts.init(
+  document.getElementById("petalScatterChartContainer")
+);
+
+// 指定散点图的配置项和数据
+var petalScatterOption = {
+  title: {
+    text: "不同种类花瓣长度与宽度的分布图",
+  },
+  legend: {
+    left: "center",
+    bottom: 10,
+  },
+  toolbox: {
+    feature: {
+      dataZoom: {},
+      brush: {
+        type: ["rect"],
+      },
+    },
+  },
+  xAxis: [
+    {
+      type: "value",
+      scale: true,
+      axisLabel: {
+        formatter: "{value} cm",
+      },
+      splitLine: {
+        show: false,
+      },
+    },
+  ],
+  yAxis: [
+    {
+      type: "value",
+      scale: true,
+      axisLabel: {
+        formatter: "{value} cm",
+      },
+      splitLine: {
+        show: false,
+      },
+    },
+  ],
+  series: [{ type: "scatter" }, { type: "scatter" }, { type: "scatter" }],
+};
+
+// 使用 fetch API 加载花萼的json数据
+fetch("/iris_petal_data")
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+
+    // 将数据赋值给 scatterOption.series
+    data.forEach((item, index) => {
+      if (petalScatterOption.series[index]) {
+        petalScatterOption.series[index].data = item.data;
+        petalScatterOption.series[index].name =
+          speciesNameMapping[item.name] || item.name;
+        petalScatterOption.legend[index] =
+          speciesNameMapping[item.name] || item.name;
+      }
+    });
+
+    petalScatterChart.setOption(petalScatterOption);
   })
   .catch((error) => console.error("Error loading the JSON data:", error));
