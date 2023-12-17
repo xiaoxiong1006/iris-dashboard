@@ -1,8 +1,19 @@
 // 基于 散点 图，初始化echarts实例
 var histChart = echarts.init(document.getElementById("histChart"));
 
+// 定义要发送的数据
+const postData = {
+  num: 5,
+};
+
 // 使用 fetch API 加载 JSON 数据
-fetch("/iris/species/sepal/histogram?num=15")
+fetch("/iris/species/sepal/histogram", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(postData), // 将 JavaScript 对象转换为 JSON 字符串
+})
   .then((response) => response.json())
   .then((data) => {
     console.log(data);

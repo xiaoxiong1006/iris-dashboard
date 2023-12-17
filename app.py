@@ -55,10 +55,16 @@ def iris_species_petal():
 
     return jsonify(data_to_return)
 
-@app.route('/iris/species/sepal/histogram')
+@app.route('/iris/species/sepal/histogram', methods=['GET', 'POST'])
 def iris_histogram():
-    # 从查询字符串获取 'num' 参数，如果没有提供，则默认为10
-    num_bins = request.args.get('num', default=10, type=int)
+    # 检查请求方法并相应地获取 'num' 参数
+    if request.method == 'POST':
+        # 如果是 POST 请求，假设 'num' 参数在发送的数据中
+        data = request.get_json()  # 获取 JSON 数据
+        num_bins = data.get('num', 10)  # 从 JSON 数据中获取 'num' 参数，默认为 10
+    else:
+        # 如果是 GET 请求，'num' 参数在查询字符串中
+        num_bins = request.args.get('num', default=10, type=int)
     
     # 创建整个数据集的共同区间边界
     min_length = iris['SepalLengthCm'].min()
