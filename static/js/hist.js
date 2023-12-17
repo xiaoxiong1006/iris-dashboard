@@ -1,56 +1,88 @@
 // 基于 散点 图，初始化echarts实例
 var histChart = echarts.init(document.getElementById("histChart"));
 
-histOption = {
-  title: {
-    text: "模拟直方图",
+// 假设您从 Flask API 获取到的数据如下
+const histogramData = {
+  "Iris-setosa": {
+    frequencies: [9, 19, 12, 9, 1, 0, 0, 0, 0, 0],
+    intervals: [
+      "4.3-4.7",
+      "4.7-5.0",
+      "5.0-5.4",
+      "5.4-5.7",
+      "5.7-6.1",
+      "6.1-6.5",
+      "6.5-6.8",
+      "6.8-7.2",
+      "7.2-7.5",
+      "7.5-7.9",
+    ],
   },
-  tooltip: {},
-  xAxis: {
-    data: ["区间1", "区间2", "区间3", "区间4", "区间5"], // 这里的区间代表数据分布的区间
-    name: "区间",
+  "Iris-versicolor": {
+    frequencies: [0, 3, 2, 16, 9, 11, 7, 2, 0, 0],
+    intervals: [
+      "4.3-4.7",
+      "4.7-5.0",
+      "5.0-5.4",
+      "5.4-5.7",
+      "5.7-6.1",
+      "6.1-6.5",
+      "6.5-6.8",
+      "6.8-7.2",
+      "7.2-7.5",
+      "7.5-7.9",
+    ],
   },
-  yAxis: {
-    name: "频率",
+  "Iris-virginica": {
+    frequencies: [0, 1, 0, 2, 6, 15, 11, 4, 5, 6],
+    intervals: [
+      "4.3-4.7",
+      "4.7-5.0",
+      "5.0-5.4",
+      "5.4-5.7",
+      "5.7-6.1",
+      "6.1-6.5",
+      "6.5-6.8",
+      "6.8-7.2",
+      "7.2-7.5",
+      "7.5-7.9",
+    ],
   },
-  series: [
-    {
-      name: "频率",
-      type: "bar",
-      barWidth: '100%',  // 设置柱子宽度为类目宽度的60%
-      data: [5, 20, 36, 10, 10], // 这里的数字代表每个区间的数据频率
-    },
-  ],
 };
 
-// // 使用 fetch API 加载 JSON 数据
-// fetch("/iris/species/petal")
-//   .then((response) => response.json())
-//   .then((data) => {
-//     console.log(data);
+const histSeries = Object.keys(histogramData).map((species) => ({
+  name: speciesNameMapping[species],
+  type: "bar",
+  data: histogramData[species].frequencies,
+  barGap: "0%",
+  barWidth: "100%",
+  itemStyle: {
+    opacity: 0.8,
+  },
+}));
 
-//     // 将数据赋值给 scatterOption.series
-//     data.forEach((item, index) => {
-//       if (scatterOption.series[index]) {
-//         scatterOption.series[index].data = item.data;
-//         scatterOption.series[index].name =
-//           speciesNameMapping[item.name] || item.name;
-//         scatterOption.legend[index] =
-//           speciesNameMapping[item.name] || item.name;
-//       }
-//     });
+const histOption = {
+  title: {
+    text: "鸢尾花花萼长度分布",
+  },
+  tooltip: {},
+  legend: {
+    data: Object.keys(histogramData).map(
+      (species) => speciesNameMapping[species]
+    ), // 将英文名映射为中文名
+    left: "center",
+    bottom: 5,
+  },
+  xAxis: {
+    data: histogramData["Iris-setosa"].intervals, // 或者其他种类的区间，确保它们是相同的
+    axisLabel: {
+      rotate: 45, // 或您认为合适的其他角度
+    },
+  },
+  yAxis: {},
+  series: histSeries,
+};
 
-//     // scatterOption.series[0].name = data[0].name;
-//     // scatterOption.series[0].data = data[0].data;
+// 使用刚指定的配置项和数据显示图表。
+histChart.setOption(histOption);
 
-//     // scatterOption.series[1].name = data[1].name;
-//     // scatterOption.series[1].data = data[1].data;
-
-//     // scatterOption.series[2].name = data[2].name;
-//     // scatterOption.series[2].data = data[2].data;
-
-//     scatterChart.setOption(scatterOption);
-//   })
-//   .catch((error) => console.error("Error loading the JSON data:", error));
-
-histChart.setOption(histOption)
