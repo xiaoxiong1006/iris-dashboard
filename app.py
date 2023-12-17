@@ -60,7 +60,7 @@ def iris_histogram():
     # 创建整个数据集的共同区间边界
     min_length = iris['SepalLengthCm'].min()
     max_length = iris['SepalLengthCm'].max()
-    bins = np.linspace(min_length, max_length, num=11)  # 创建10个区间
+    bins = np.linspace(min_length, max_length, num=21)  # 创建10个区间
 
     histogram_data = {}
     for species in iris['Species'].unique():
