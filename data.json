@@ -1,0 +1,14 @@
+[
+    {
+        "species": "Iris-setosa",
+        "count": 50
+    },
+    {
+        "species": "Iris-versicolor",
+        "count": 50
+    },
+    {
+        "species": "Iris-virginica",
+        "count": 50
+    }
+]
