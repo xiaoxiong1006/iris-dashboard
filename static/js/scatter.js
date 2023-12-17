@@ -7,116 +7,39 @@ scatterOption = {
   series: [
     {
       type: "scatter",
-      name:'Iris-setosa',
-      data: [
-        [1.4, 0.2],
-        [1.4, 0.2],
-        [1.3, 0.2],
-        [1.5, 0.2],
-        [1.4, 0.2],
-        [1.7, 0.4],
-        [1.4, 0.3],
-        [1.5, 0.2],
-        [1.4, 0.2],
-        [1.5, 0.1],
-        [1.5, 0.2],
-        [1.6, 0.2],
-        [1.4, 0.1],
-        [1.1, 0.1],
-        [1.2, 0.2],
-        [1.5, 0.4],
-        [1.3, 0.4],
-        [1.4, 0.3],
-        [1.7, 0.3],
-        [1.5, 0.3],
-        [1.7, 0.2],
-        [1.5, 0.4],
-        [1.0, 0.2],
-        [1.7, 0.5],
-        [1.9, 0.2],
-        [1.6, 0.2],
-        [1.6, 0.4],
-        [1.5, 0.2],
-        [1.4, 0.2],
-        [1.6, 0.2],
-        [1.6, 0.2],
-        [1.5, 0.4],
-        [1.5, 0.1],
-        [1.4, 0.2],
-        [1.5, 0.1],
-        [1.2, 0.2],
-        [1.3, 0.2],
-        [1.5, 0.1],
-        [1.3, 0.2],
-        [1.5, 0.2],
-        [1.3, 0.3],
-        [1.3, 0.3],
-        [1.3, 0.2],
-        [1.6, 0.6],
-        [1.9, 0.4],
-        [1.4, 0.3],
-        [1.6, 0.2],
-        [1.4, 0.2],
-        [1.5, 0.2],
-        [1.4, 0.2],
-      ],
     },
     {
-        type: "scatter",
-        name:'Iris-versicolor',
-        data:[[4.7, 1.4],
-        [4.5, 1.5],
-        [4.9, 1.5],
-        [4.0, 1.3],
-        [4.6, 1.5],
-        [4.5, 1.3],
-        [4.7, 1.6],
-        [3.3, 1.0],
-        [4.6, 1.3],
-        [3.9, 1.4],
-        [3.5, 1.0],
-        [4.2, 1.5],
-        [4.0, 1.0],
-        [4.7, 1.4],
-        [3.6, 1.3],
-        [4.4, 1.4],
-        [4.5, 1.5],
-        [4.1, 1.0],
-        [4.5, 1.5],
-        [3.9, 1.1],
-        [4.8, 1.8],
-        [4.0, 1.3],
-        [4.9, 1.5],
-        [4.7, 1.2],
-        [4.3, 1.3],
-        [4.4, 1.4],
-        [4.8, 1.4],
-        [5.0, 1.7],
-        [4.5, 1.5],
-        [3.5, 1.0],
-        [3.8, 1.1],
-        [3.7, 1.0],
-        [3.9, 1.2],
-        [5.1, 1.6],
-        [4.5, 1.5],
-        [4.5, 1.6],
-        [4.7, 1.5],
-        [4.4, 1.3],
-        [4.1, 1.3],
-        [4.0, 1.3],
-        [4.4, 1.2],
-        [4.6, 1.4],
-        [4.0, 1.2],
-        [3.3, 1.0],
-        [4.2, 1.3],
-        [4.2, 1.2],
-        [4.2, 1.3],
-        [4.3, 1.3],
-        [3.0, 1.1],
-        [4.1, 1.3]]
-
-    }
+      type: "scatter",
+    },
+    {
+      type: "scatter",
+    },
   ],
 };
 
-scatterChart.setOption(scatterOption);
+// 使用 fetch API 加载 JSON 数据
+fetch("/iris/species/petal")
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+
+    // 将数据赋值给 scatterOption.series
+    data.forEach((item, index) => {
+      if (scatterOption.series[index]) {
+        scatterOption.series[index].data = item.data;
+        scatterOption.series[index].name = item.name;
+      }
+    });
+
+    // scatterOption.series[0].name = data[0].name;
+    // scatterOption.series[0].data = data[0].data;
+
+    // scatterOption.series[1].name = data[1].name;
+    // scatterOption.series[1].data = data[1].data;
+
+    // scatterOption.series[2].name = data[2].name;
+    // scatterOption.series[2].data = data[2].data;
+
+    scatterChart.setOption(scatterOption);
+  })
+  .catch((error) => console.error("Error loading the JSON data:", error));
