@@ -2,7 +2,7 @@
 var histChart = echarts.init(document.getElementById("histChart"));
 
 // 使用 fetch API 加载 JSON 数据
-fetch("/iris/species/sepal/histogram")
+fetch("/iris/species/sepal/histogram?num=15")
   .then((response) => response.json())
   .then((data) => {
     console.log(data);
@@ -47,4 +47,3 @@ fetch("/iris/species/sepal/histogram")
     histChart.setOption(histOption);
   })
   .catch((error) => console.error("Error loading the JSON data:", error));
-  

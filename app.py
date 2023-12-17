@@ -1,4 +1,4 @@
-from flask import Flask,render_template,jsonify
+from flask import Flask,render_template,jsonify,request
 import pandas as pd
 import numpy as np
 
@@ -57,10 +57,13 @@ def iris_species_petal():
 
 @app.route('/iris/species/sepal/histogram')
 def iris_histogram():
+    # 从查询字符串获取 'num' 参数，如果没有提供，则默认为10
+    num_bins = request.args.get('num', default=10, type=int)
+    
     # 创建整个数据集的共同区间边界
     min_length = iris['SepalLengthCm'].min()
     max_length = iris['SepalLengthCm'].max()
-    bins = np.linspace(min_length, max_length, num=21)  # 创建10个区间
+    bins = np.linspace(min_length, max_length, num=num_bins+1)  # 注意这里是 num_bins + 1
 
     histogram_data = {}
     for species in iris['Species'].unique():
