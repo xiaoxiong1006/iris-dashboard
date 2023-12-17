@@ -2,8 +2,38 @@
 var scatterChart = echarts.init(document.getElementById("scatterChart"));
 
 scatterOption = {
-  xAxis: {},
-  yAxis: {},
+  title: {
+    text: "不同种类的鸢尾花花瓣分布",
+  },
+  grid: {
+    left: "3%",
+    right: "7%",
+    bottom: "7%",
+    containLabel: true,
+  },
+  toolbox: {
+    feature: {
+      dataZoom: {},
+    },
+  },
+  legend: {
+    left: "center",
+    bottom: 5,
+  },
+  xAxis: {
+    type: "value",
+    scale: true,
+    axisLabel: {
+      formatter: "{value} cm",
+    }
+  },
+  yAxis: {
+    type: "value",
+    scale: true,
+    axisLabel: {
+      formatter: "{value} cm",
+    }
+  },
   series: [
     {
       type: "scatter",
@@ -27,7 +57,10 @@ fetch("/iris/species/petal")
     data.forEach((item, index) => {
       if (scatterOption.series[index]) {
         scatterOption.series[index].data = item.data;
-        scatterOption.series[index].name = item.name;
+        scatterOption.series[index].name =
+          speciesNameMapping[item.name] || item.name;
+        scatterOption.legend[index] =
+          speciesNameMapping[item.name] || item.name;
       }
     });
 
