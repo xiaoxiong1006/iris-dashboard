@@ -1,0 +1,3 @@
+cd C:\Users\user\Desktop\ba_code\demo0602-first-webpage
+
+flask run --port=5000 --host=0.0.0.0
