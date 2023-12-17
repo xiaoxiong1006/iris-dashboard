@@ -30,6 +30,9 @@ var option = {
 
 // 指定饼图的配置项和数据
 pieOption = {
+    title: {
+        text: '鸢尾花数据集的种类分布'
+    },
     series: [
         {
             type: 'pie',
